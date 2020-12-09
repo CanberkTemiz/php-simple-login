@@ -1,0 +1,17 @@
+{
+    "name": "canberktemiz/test-project",
+    "authors": [
+        {
+            "name": "Canberk Temiz",
+            "email": "canberk.tmz@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
