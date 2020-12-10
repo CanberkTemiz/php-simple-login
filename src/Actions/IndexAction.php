@@ -12,17 +12,10 @@ class IndexAction
 {
      public function __invoke()
      {
-          session_start();
-
-          if (SessionManager::has('user')) 
-          {
-               $user = SessionManager::get('user');
+          $user = SessionManager::get('user');
                
-               new ViewRenderer('home', [
-                    "user" => $user
-               ]);
-          }
-
-          Redirect::to('login');
+          new ViewRenderer('index', [
+               'user' => $user
+          ]);
      }
 }

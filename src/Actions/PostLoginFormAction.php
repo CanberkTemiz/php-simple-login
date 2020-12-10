@@ -7,54 +7,39 @@ namespace App\Actions;
 use App\Connection;
 use App\SessionManager;
 use App\ViewRenderer;
+use App\Redirect;
 use PDO;
 
 class PostLoginFormAction
 {
      public function __invoke()
      {
-          session_start();
-          if ( SessionManager::has('user')) 
-          {
-               $user = SessionManager::get('user');
-          
-               new ViewRenderer('home', [
-                    'user' => $user
-               ]);
+          if (!$_POST) {
+               Redirect::to('login');
           }
 
           $params = $_POST;
           
-          if ( count($params) > 0) 
-          {
-               $loginName = $params['login_name'];
-               $password = $params['password'];
-          
-               $statement = Connection::getInstance()
-                    ->prepare('select * from users where (username = :loginName OR email = :loginName) AND (password = :password)');
+          $loginName = $params['login_name'];
+          $password = $params['password'];
      
-               $statement->bindValue('loginName', $loginName);
-               $statement->bindValue('password', $password);
-               $statement->setFetchMode(PDO::FETCH_ASSOC);
-               $statement->execute();
-     
-               $user = $statement->fetch();
-     
-               if (!$user) 
-               {
-                    new ViewRenderer('login', [
-                         'errorMessage' => 'Cannot find a user with this username/email and password combination'
-                    ]);
-               }
-                
-               SessionManager::set('user', $user);
-     
-               // welcome page
-               new ViewRenderer('home', [
-                    'user' => $user,
+          $statement = Connection::getInstance()
+               ->prepare('select * from users where (username = :loginName OR email = :loginName) AND (password = :password)');
+
+          $statement->bindValue('loginName', $loginName);
+          $statement->bindValue('password', $password);
+          $statement->setFetchMode(PDO::FETCH_ASSOC);
+          $statement->execute();
+
+          $user = $statement->fetch();
+
+          if (!$user) {
+               new ViewRenderer('login', [
+                    'errorMessage' => 'Cannot find a user with this username/email and password combination'
                ]);
           }
-
-          new ViewRenderer("login");
+               
+          SessionManager::set('user', $user);
+          Redirect::to('index');
      }
 }

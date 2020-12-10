@@ -11,7 +11,6 @@ class LogoutAction
 {
      public function __invoke()
      {
-          session_start();
           SessionManager::delete('user');
           Redirect::to('login');
      }

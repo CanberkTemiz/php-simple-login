@@ -18,9 +18,16 @@ class Bootstrap
 
      public function __construct(array $params)
      {
+          session_start();
           $this->loadDotEnvFile();
           $this->params = $params;
-          $this->action = $params['action'] ?? '';
+          $this->action = $params['action'] ?? 'index';
+          $this->middlewares = [
+              'index' => AuthMiddleware::class,
+              'logout' => AuthMiddleware::class,
+              'post-login-form' => GuestMiddleware::class,
+              'login' => GuestMiddleware::class,
+          ];
      }
 
      public function run() 
@@ -30,7 +37,8 @@ class Bootstrap
 
      private function initBasicRouter(string $action)
      {
-          switch (strtolower($action)) {
+          $action = strtolower($action);
+          switch ($action) {
                case 'login':
                     $actionHandler = new LoginAction();
                     break;
@@ -43,11 +51,22 @@ class Bootstrap
                     $actionHandler = new LogoutAction();
                     break;
 
-               default:
+                case 'index':
                     $actionHandler = new IndexAction();                   
                     break;
+
+                default:
+                    Redirect::to('index');
+                break;
           }
 
+          $middlewareReference = $this->middlewares[$action] ?? null;
+
+          if ($middlewareReference !== null) {
+            
+            (new $middlewareReference)();
+          }
+          
           $actionHandler();
      }
 
