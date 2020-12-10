@@ -13,7 +13,6 @@ class PostLoginFormAction
 {
      public function __invoke()
      {
-
           session_start();
           if ( SessionManager::has('user')) 
           {
