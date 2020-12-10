@@ -6,10 +6,10 @@ namespace App;
 
 class AuthMiddleware
 {
-     public function __invoke()
-     {
-          if (!SessionManager::has('user')) {
-               return Redirect::to('login');
-          }
-     }
+    public function __invoke()
+    {
+        if (!SessionManager::has('user')) {
+            return Redirect::to('login');
+        }
+    }
 }

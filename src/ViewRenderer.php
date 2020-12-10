@@ -6,10 +6,10 @@ namespace App;
 
 class ViewRenderer
 {
-     public function __construct(string $viewPath, array $params = [])
-     {
-          extract($params);
-          include "views/$viewPath.phtml";
-          exit();
-     }
+    public function __construct(string $viewPath, array $params = [])
+    {
+        extract($params);
+        include "views/$viewPath.phtml";
+        exit();
+    }
 }
