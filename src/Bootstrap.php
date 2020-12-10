@@ -4,41 +4,40 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Actions\IndexAction;
 use App\Actions\LoginAction;
 use App\Actions\LogoutAction;
-use App\Actions\IndexAction;
 use App\Actions\PostLoginFormAction;
-use App\SessionManager;
 use Dotenv\Dotenv;
 
 class Bootstrap
 {
-     private array $params;
-     private string $action;
+    private array $params;
+    private string $action;
 
-     public function __construct(array $params)
-     {
-          session_start();
-          $this->loadDotEnvFile();
-          $this->params = $params;
-          $this->action = $params['action'] ?? 'index';
-          $this->middlewares = [
-              'index' => AuthMiddleware::class,
-              'logout' => AuthMiddleware::class,
-              'post-login-form' => GuestMiddleware::class,
-              'login' => GuestMiddleware::class,
-          ];
-     }
+    public function __construct(array $params)
+    {
+        session_start();
+        $this->loadDotEnvFile();
+        $this->params = $params;
+        $this->action = $params['action'] ?? 'index';
+        $this->middlewares = [
+            'index'           => AuthMiddleware::class,
+            'logout'          => AuthMiddleware::class,
+            'post-login-form' => GuestMiddleware::class,
+            'login'           => GuestMiddleware::class,
+        ];
+    }
 
-     public function run() 
-     {
-          $this->initBasicRouter($this->action);
-     }
+    public function run()
+    {
+        $this->initBasicRouter($this->action);
+    }
 
-     private function initBasicRouter(string $action)
-     {
-          $action = strtolower($action);
-          switch ($action) {
+    private function initBasicRouter(string $action)
+    {
+        $action = strtolower($action);
+        switch ($action) {
                case 'login':
                     $actionHandler = new LoginAction();
                     break;
@@ -52,7 +51,7 @@ class Bootstrap
                     break;
 
                 case 'index':
-                    $actionHandler = new IndexAction();                   
+                    $actionHandler = new IndexAction();
                     break;
 
                 default:
@@ -60,19 +59,18 @@ class Bootstrap
                 break;
           }
 
-          $middlewareReference = $this->middlewares[$action] ?? null;
+        $middlewareReference = $this->middlewares[$action] ?? null;
 
-          if ($middlewareReference !== null) {
-            
-            (new $middlewareReference)();
-          }
-          
-          $actionHandler();
-     }
+        if ($middlewareReference !== null) {
+            (new $middlewareReference())();
+        }
 
-     private function loadDotEnvFile()
-     {
-          $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
-          $dotenv->load();
-     }
+        $actionHandler();
+    }
+
+    private function loadDotEnvFile()
+    {
+        $dotenv = Dotenv::createImmutable(__DIR__.'/../');
+        $dotenv->load();
+    }
 }

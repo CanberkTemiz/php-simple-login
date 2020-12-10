@@ -6,10 +6,10 @@ namespace App;
 
 class GuestMiddleware
 {
-     public function __invoke()
-     {
-          if (SessionManager::has('user')) {
-               return Redirect::to('index');
-          }
-     }
+    public function __invoke()
+    {
+        if (SessionManager::has('user')) {
+            return Redirect::to('index');
+        }
+    }
 }
