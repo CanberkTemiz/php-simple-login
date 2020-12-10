@@ -8,7 +8,6 @@ class ViewRenderer
 {
      public function __construct(string $viewPath, array $params = [])
      {
-          // var_dump($params); exit();
           extract($params);
           include "views/$viewPath.phtml";
           exit();

@@ -5,17 +5,14 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\SessionManager;
+use App\Redirect;
 
 class LogoutAction
 {
      public function __invoke()
      {
+          session_start();
           SessionManager::delete('user');
-
-          $protocol = $_SERVER['SERVER_PROTOCOL'] === 'HTTP/1.1' 
-          ? 'http' 
-          : 'https';
-
-          header("Location: {$protocol}://{$_SERVER['HTTP_HOST']}/?action=login");
+          Redirect::to('login');
      }
 }

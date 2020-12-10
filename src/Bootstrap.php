@@ -8,6 +8,7 @@ use App\Actions\LoginAction;
 use App\Actions\LogoutAction;
 use App\Actions\IndexAction;
 use App\Actions\PostLoginFormAction;
+use App\SessionManager;
 use Dotenv\Dotenv;
 
 class Bootstrap
@@ -21,7 +22,6 @@ class Bootstrap
           $this->params = $params;
           $this->action = $params['action'] ?? '';
      }
-
 
      public function run() 
      {
@@ -47,7 +47,6 @@ class Bootstrap
                     $actionHandler = new IndexAction();                   
                     break;
           }
-
 
           $actionHandler();
      }
