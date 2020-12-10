@@ -12,4 +12,4 @@ create table users
 )
 
 insert into users (username, email, first_name, last_name, mobile, password) values
- ('canberk', 'email@email.com', 'Canberk', 'Temiz', '+15164654', '12341234');
+ ('smallthings', 'test@test.com', 'Canberk', 'Temiz', '+15164654', '1234');
